@@ -1,6 +1,6 @@
 <template>
   <div class="buttongroup">
-    <div class="buttonContainer" v-for="option in options">
+    <div v-bind:key="index" class="buttonContainer" v-for="(option,index) in options">
       <button
         v-bind:class="[option.id === selected ? 'active' : '', 'button']"
         v-on:click="selectButton(option.id)"

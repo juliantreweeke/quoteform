@@ -5,10 +5,10 @@
       <input type="text" name="email" placeholder="Email" />
       <input type="text" name="phone" placeholder="Phone" />
     </div>
-    <Numberslider title="bedrooms" />
-    <Numberslider title="bathrooms" />
+    <Numberslider v-on:childToParent="onChildClick" title="bedrooms" />
+    <Numberslider v-on:childToParent="onChildClick" title="bathrooms" />
     <Buttongroup :options="buttonOptions" />
-    <Submitbutton />
+    <Submitbutton :action="submitForm" />
   </div>
 </template>
 
@@ -37,8 +37,21 @@ export default {
         },
         { name: "Bi-weekly cleaning", deal: "10% off", id: "4" },
         { name: "Bi-weekly cleaning", deal: "10% off", id: "5" }
-      ]
+      ],
+      formValue: {
+        bedrooms: "",
+        bathrooms: ""
+      }
     };
+  },
+  methods: {
+    submitForm: function() {
+      alert("submitted");
+    },
+    onChildClick(value) {
+      this.formValue.bedrooms = value;
+      alert(this.formValue);
+    }
   }
 };
 </script>
