@@ -1,0 +1,49 @@
+<template>
+  <div class="buttongroup">
+    <div class="buttonContainer" v-for="option in options">
+      <button
+        v-bind:class="[option.id === selected ? 'active' : '', 'button']"
+        v-on:click="selectButton(option.id)"
+      >{{ option.name }}</button>
+      {{option.deal}}
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Buttongroup",
+  props: ["options"],
+  data: function() {
+    return {
+      selected: ""
+    };
+  },
+  methods: {
+    selectButton: function(id) {
+      alert("clicked");
+      this.selected = id;
+    }
+  }
+};
+</script>
+
+<style scope>
+.buttongroup {
+  width: 100%;
+}
+.button {
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 50px;
+  background: grey;
+}
+.buttonContainer {
+  display: inline-flex;
+  flex-direction: column;
+}
+.active {
+  background: red;
+}
+</style>
