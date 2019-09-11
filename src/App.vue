@@ -9,6 +9,10 @@
 import Header from "./components/Header.vue";
 import Main from "./components/Main.vue";
 
+import Vue from "vue";
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+
 export default {
   name: "app",
   components: {

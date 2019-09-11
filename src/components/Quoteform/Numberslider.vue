@@ -17,15 +17,9 @@ export default {
   },
   watch: {
     value: function(value) {
-      this.$emit("childToParent", this.value);
+      this.$emit("childToParent", this.value, this.title);
     }
   }
-  // methods: {
-  //   emitToParent(event) {
-  //     this.$emit("childToParent", this.value);
-  //     // this.$emit("childToParent", { title: this.value });
-  //   }
-  // }
 };
 </script>
 

@@ -1,28 +1,32 @@
 <template>
-  <div id="quoteform">
+  <form @submit.prevent="submit" id="quoteform">
     <div id="quoteform__text-container">
-      <input type="text" name="first name" placeholder="First name" />
-      <input type="text" name="email" placeholder="Email" />
-      <input type="text" name="phone" placeholder="Phone" />
+      <input v-model="name" type="text" name="full name" placeholder="First name" />
+      <input v-model="email" type="text" name="email" placeholder="Email" />
+      <input v-model="phone" type="text" name="phone" placeholder="Phone" />
     </div>
+    <div class="error" v-if="!$v.name.required">Name is required</div>
+    <div
+      class="error"
+      v-if="!$v.name.minLength"
+    >Name must have at least {{$v.name.$params.minLength.min}} letters.</div>
     <Numberslider v-on:childToParent="onChildClick" title="bedrooms" />
     <Numberslider v-on:childToParent="onChildClick" title="bathrooms" />
     <Buttongroup :options="buttonOptions" />
-    <Submitbutton :action="submitForm" />
-  </div>
+    <button class="button" type="submit" :disabled="submitStatus === 'PENDING'">Submit!</button>
+    <p>{{submitStatus}}</p>
+  </form>
 </template>
 
 <script>
+import { required, minLength, between } from "vuelidate/lib/validators";
 import Numberslider from "./Numberslider.vue";
 import Buttongroup from "./Buttongroup.vue";
-import Submitbutton from "./Submitbutton.vue";
-
 export default {
   name: "Quoteform",
   components: {
     Numberslider,
-    Buttongroup,
-    Submitbutton
+    Buttongroup
   },
   data() {
     return {
@@ -38,26 +42,57 @@ export default {
         { name: "Bi-weekly cleaning", deal: "10% off", id: "4" },
         { name: "Bi-weekly cleaning", deal: "10% off", id: "5" }
       ],
-      formValue: {
-        bedrooms: "",
-        bathrooms: ""
-      }
+      submitStatus: null,
+      bedrooms: 1,
+      bathrooms: 1,
+      name: "",
+      email: "",
+      phone: ""
     };
   },
-  methods: {
-    submitForm: function() {
-      alert("submitted");
+  validations: {
+    bedrooms: {
+      required
     },
-    onChildClick(value) {
-      this.formValue.bedrooms = value;
-      alert(this.formValue);
+    bathrooms: {
+      required
+    },
+    name: {
+      required,
+      minLength: minLength(2)
+    },
+    email: {
+      required,
+      minLength: minLength(2)
+    }
+  },
+  methods: {
+    submit() {
+      console.log("submit!");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        this.submitStatus = "PENDING";
+        setTimeout(() => {
+          this.submitStatus = "OK";
+        }, 500);
+      }
+    },
+    onChildClick(value, title) {
+      this._data[title] = parseInt(value);
+      console.log("bedrooms", this.bedrooms);
+      console.log("bathrooms", this.bathrooms);
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 #quoteform {
   min-height: 25px;
+}
+.error {
+  color: red;
 }
 </style>
