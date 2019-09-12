@@ -1,20 +1,49 @@
 <template>
   <form @submit.prevent="submit" id="quoteform">
-    <div id="quoteform__text-container">
-      <input v-model="name" type="text" name="full name" placeholder="First name" />
-      <input v-model="email" type="text" name="email" placeholder="Email" />
-      <input v-model="phone" type="text" name="phone" placeholder="Phone" />
+    <div class="quoteform__text-container">
+      <div class="quoteform__text-input">
+        <input
+          v-bind:class="errors && !$v.formResponses.name.required ? 'input-error' : ''"
+          v-model.lazy="$v.formResponses.name.$model"
+          type="text"
+          name="full name"
+          placeholder="Full name"
+        />
+        <span class="error" v-if="errors && !$v.formResponses.name.required">Full name is required.</span>
+      </div>
+
+      <div class="quoteform__text-input">
+        <input
+          v-model.lazy="$v.formResponses.email.$model"
+          type="text"
+          name="email"
+          placeholder="Email"
+        />
+        <span class="error" v-if="errors && !$v.formResponses.email.required">Email is required.</span>
+      </div>
+
+      <div class="quoteform__text-input">
+        <input
+          v-model.lazy="$v.formResponses.phone.$model"
+          type="text"
+          name="phone"
+          placeholder="Phone"
+        />
+        <span
+          class="error"
+          v-if="errors && !$v.formResponses.phone.required"
+        >Phone number is required.</span>
+      </div>
     </div>
-    <div class="error" v-if="!$v.name.required">Name is required</div>
-    <div
-      class="error"
-      v-if="!$v.name.minLength"
-    >Name must have at least {{$v.name.$params.minLength.min}} letters.</div>
+
     <Numberslider v-on:childToParent="onChildClick" title="bedrooms" />
     <Numberslider v-on:childToParent="onChildClick" title="bathrooms" />
-    <Buttongroup :options="buttonOptions" />
-    <button class="button" type="submit" :disabled="submitStatus === 'PENDING'">Submit!</button>
-    <p>{{submitStatus}}</p>
+    <Buttongroup v-on:childToParent="onChildClick" title="frequency" :options="buttonOptions" />
+
+    <button class="button" type="submit">Submit!</button>
+
+    <p>{{uiState}}</p>
+    <p>{{$v.formResponses}}</p>
   </form>
 </template>
 
@@ -42,47 +71,58 @@ export default {
         { name: "Bi-weekly cleaning", deal: "10% off", id: "4" },
         { name: "Bi-weekly cleaning", deal: "10% off", id: "5" }
       ],
-      submitStatus: null,
-      bedrooms: 1,
-      bathrooms: 1,
-      name: "",
-      email: "",
-      phone: ""
+      errors: false,
+      empty: true,
+      uiState: "submit not clicked",
+      formResponses: {
+        frequency: null,
+        bedrooms: 1,
+        bathrooms: 1,
+        name: null,
+        email: null,
+        phone: null
+      }
     };
   },
   validations: {
-    bedrooms: {
-      required
-    },
-    bathrooms: {
-      required
-    },
-    name: {
-      required,
-      minLength: minLength(2)
-    },
-    email: {
-      required,
-      minLength: minLength(2)
+    formResponses: {
+      frequency: {
+        required
+      },
+      bedrooms: {
+        required
+      },
+      bathrooms: {
+        required
+      },
+      name: {
+        required,
+        minLength: minLength(2)
+      },
+      email: {
+        required,
+        minLength: minLength(2)
+      },
+      phone: {
+        required,
+        minLength: minLength(10)
+      }
     }
   },
   methods: {
     submit() {
-      console.log("submit!");
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        this.submitStatus = "ERROR";
-      } else {
-        this.submitStatus = "PENDING";
-        setTimeout(() => {
-          this.submitStatus = "OK";
-        }, 500);
+      // this.formTouched = !this.$v.formResponses.$anyDirty;
+      this.errors = this.$v.formResponses.$anyError;
+      this.uiState = "submit clicked";
+      if (this.errors === false && this.formTouched === false) {
+        //this is where you send the responses
+        this.uiState = "form submitted";
       }
     },
     onChildClick(value, title) {
-      this._data[title] = parseInt(value);
-      console.log("bedrooms", this.bedrooms);
-      console.log("bathrooms", this.bathrooms);
+      this._data.formResponses[title] = parseInt(value);
+      console.log(this._data.formResponses[title]);
+      debugger;
     }
   }
 };
@@ -92,7 +132,30 @@ export default {
 #quoteform {
   min-height: 25px;
 }
+
+.quoteform__text-container {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center; /*centers items on the line (the x-axis by default)*/
+}
+
+.quoteform__text-input {
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+  /* width: 20%; */
+}
+
+.quoteform__text-input .input-error {
+  border: 1px solid red;
+  /* width: 20%; */
+}
+
 .error {
   color: red;
+  font-size: 12px;
+  /* position: absolute; */
+  text-transform: uppercase;
 }
 </style>
