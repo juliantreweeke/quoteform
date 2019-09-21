@@ -1,7 +1,7 @@
 <template>
-  <div id="banner">
-    <h1>Blue Mountains Cleaning Services</h1>
-    <p>Premium cleaning services for Julian</p>
+  <div class="banner">
+    <h1>Sydney environmentally friendly home cleaners</h1>
+    <h2>Servicing The Blue Mountains & The Hills District</h2>
   </div>
 </template>
 
@@ -15,22 +15,15 @@ export default {
 </script>
 
 <style scoped>
-#banner {
-  color: white;
+.banner {
   min-height: 25px;
-  text-align: center;
-  margin-top: auto;
-  padding-top: 100px;
+  text-align: left;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
-h1 {
-  font-size: 40px;
+h1,
+h2 {
   margin: 0px;
   padding: 0px;
-}
-p {
-  margin: 0px;
-
-  font-size: 24px;
-  font-weight: bold;
 }
 </style>

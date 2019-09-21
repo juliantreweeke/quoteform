@@ -23,17 +23,47 @@ export default {
 </script>
 
 <style>
+@import "./assets/styles/variables.css";
+
 body {
   margin: 0px;
 }
 
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   margin-top: 0px;
   padding: 0px;
-  color: #2c3e50;
+}
+
+h1,
+h2 {
+  font-weight: 500;
+}
+
+h1,
+h2,
+h3,
+button,
+p {
+  color: var(--font-color);
+}
+
+h1 {
+  font-size: 30px;
+}
+h2 {
+  font-size: var(--h2-font-size);
+}
+p,
+input {
+  font-size: var(--body-font-size);
+}
+button {
+  font-size: 16px;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
 }
 </style>

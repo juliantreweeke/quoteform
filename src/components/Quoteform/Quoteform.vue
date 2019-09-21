@@ -1,8 +1,9 @@
 <template>
-  <form @submit.prevent="submit" id="quoteform">
-    <div class="quoteform__text-container">
-      <div class="quoteform__text-input">
+  <form @submit.prevent="submit" class="quoteform">
+    <div class="quoteform__text-input-group">
+      <div class="quoteform__text-input-container">
         <input
+          class="quoteform__text-input"
           v-bind:class="submitted && $v.formResponses.name.$error ? 'input-error' : ''"
           v-model.lazy="$v.formResponses.name.$model"
           type="text"
@@ -15,8 +16,9 @@
         >Full name is required.</span>
       </div>
 
-      <div class="quoteform__text-input">
+      <div class="quoteform__text-input-container">
         <input
+          class="quoteform__text-input"
           v-bind:class="submitted && $v.formResponses.email.$error ? 'input-error' : ''"
           v-model.lazy="$v.formResponses.email.$model"
           type="text"
@@ -30,8 +32,9 @@
         </div>
       </div>
 
-      <div class="quoteform__text-input">
+      <div class="quoteform__text-input-container">
         <input
+          class="quoteform__text-input"
           v-bind:class="submitted && $v.formResponses.phone.$error ? 'input-error' : ''"
           v-model.lazy="$v.formResponses.phone.$model"
           type="text"
@@ -39,7 +42,7 @@
           placeholder="Phone"
         />
         <div class="invalid-feedback" v-if="submitted && $v.formResponses.phone.$error">
-          <span v-if="!$v.formResponses.phone.required">Email is required</span>
+          <span v-if="!$v.formResponses.phone.required">Phone number is required</span>
           <span
             v-if="!$v.formResponses.phone.minLength && $v.formResponses.phone.numeric"
           >Number must have at least 10 digits.</span>
@@ -47,9 +50,10 @@
         </div>
       </div>
     </div>
-
-    <Numberslider v-on:childToParent="onChildClick" title="bedrooms" />
-    <Numberslider v-on:childToParent="onChildClick" title="bathrooms" />
+    <div class="numberslider-container">
+      <Numberslider v-on:childToParent="onChildClick" title="Bedrooms" />
+      <Numberslider v-on:childToParent="onChildClick" title="Bathrooms" />
+    </div>
     <Buttongroup
       @submit.prevent="submit"
       v-on:childToParent="onChildClick"
@@ -57,7 +61,7 @@
       :options="buttonOptions"
     />
 
-    <button class="button" type="submit">Submit!</button>
+    <button class="submit-button" type="submit">SEE YOUR QUOTE AND BOOK IN 60 SECONDS</button>
   </form>
 </template>
 
@@ -74,21 +78,21 @@ export default {
   data() {
     return {
       buttonOptions: [
-        { name: "Bi-weekly cleaning", deal: "10% off", id: "1" },
-        { name: "Ass cleaning", deal: "100% off", id: "2" },
+        { name: "Bi-weekly clean", deal: "10% off", id: "1" },
+        { name: "Ass clean", deal: "100% off", id: "2" },
         {
-          name: "Bi-weekly cleaning",
+          name: "Bi-weekly clean",
           deal: "10% off",
           id: "assweekly",
           id: "3"
         },
-        { name: "Bi-weekly cleaning", deal: "10% off", id: "4" },
-        { name: "Bi-weekly cleaning", deal: "10% off", id: "5" }
+        { name: "Bi-weekly clean", deal: "10% off", id: "4" },
+        { name: "Bi-weekly clean", deal: "10% off", id: "5" }
       ],
       formResponses: {
-        frequency: null,
-        bedrooms: 1,
-        bathrooms: 1,
+        frequency: 1,
+        Bedrooms: 1,
+        Bathrooms: 1,
         name: null,
         email: null,
         phone: null
@@ -101,10 +105,10 @@ export default {
       frequency: {
         required
       },
-      bedrooms: {
+      Bedrooms: {
         required
       },
-      bathrooms: {
+      Bathrooms: {
         required
       },
       name: {
@@ -124,7 +128,6 @@ export default {
   },
   methods: {
     submit() {
-      debugger;
       this.submitted = true;
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -141,30 +144,58 @@ export default {
 </script>
 
 <style scoped>
-#quoteform {
+.quoteform {
   min-height: 25px;
 }
 
-.quoteform__text-container {
+.quoteform__text-input-group {
   display: flex;
   flex-direction: row;
   text-align: center;
-  justify-content: center;
+}
+
+.quoteform__text-input-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .quoteform__text-input {
-  display: flex;
-  flex-direction: column;
-  min-height: 100px;
+  height: 40px;
+  min-width: 260px;
+  margin-right: 30px;
+  border: 2px solid var(--input-border-color);
+  border-radius: var(--border-radius);
+  padding-left: 12px;
 }
 
-.quoteform__text-input .input-error {
-  border: 1px solid red;
+.quoteform__text-input:focus {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.quoteform__text-input-container .input-error {
+  border: 1px solid var(--form-error);
+  box-shadow: 0 0 5px var(--form-error);
 }
 
 .invalid-feedback {
-  color: red;
+  margin-top: 10px;
+  margin-left: 5px;
+  color: var(--form-error);
   font-size: 12px;
-  text-transform: uppercase;
+  text-align: left;
+}
+
+.submit-button {
+  background-color: var(--call-to-action-color);
+  height: 60px;
+  min-width: 477px;
+  font-size: var(--h2-font-size);
+}
+
+.numberslider-container {
+  display: flex;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 </style>

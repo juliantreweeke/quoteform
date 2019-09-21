@@ -1,0 +1,24 @@
+:root {
+    --font-family: "Open-sans", "Helvetica", "Arial", sans-serif;
+
+    --green: #589075;
+    --light-grey: #E6E6E7;
+    --grey: #ADADAD;
+    --grey-secondary: #707070;
+    --dark-grey: #312F2F;
+    --orange: #F15F23;
+    --white: #FCFCFC;
+    --red: #B00020;
+    --border-radius: 4px;
+    --body-font-size: 16px;
+    --h2-font-size: 18px;
+    --primary-color: var(--green);
+    --secondary-color: var(--dark-grey);
+    --call-to-action-color: var(--orange);
+    --placeholder-color: var(--grey);
+    --input-bg-primary: var(--white);
+    --input-bg-secondary: var(--light-grey);
+    --input-border-color: var(--grey-secondary);
+    --font-color: var(--white);
+    --form-error: var(--red);
+}

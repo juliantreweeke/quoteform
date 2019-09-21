@@ -6,7 +6,9 @@
         v-bind:class="[option.id == selected ? 'active' : '', 'button']"
         v-on:click="selectButton(option.id)"
       >{{ option.name }}</button>
-      {{option.deal}}
+      <span class="extra-info">
+        <p>{{option.deal}}</p>
+      </span>
     </div>
   </div>
 </template>
@@ -33,22 +35,27 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .buttongroup {
   width: 100%;
 }
 .button {
-  width: 100%;
-  margin-left: 10px;
-  margin-right: 10px;
+  min-width: 135px;
+  height: 45px;
+  margin-right: 35px;
   height: 50px;
-  background: grey;
+  background: var(--secondary-color);
+  border: none;
+  opacity: 0.9;
 }
 .buttonContainer {
   display: inline-flex;
   flex-direction: column;
 }
 .active {
-  background: green;
+  background: var(--primary-color);
+}
+.extra-info {
+  margin-left: 4px;
 }
 </style>
