@@ -37,7 +37,7 @@ describe('Quoteform.vue', () => {
       submit: mockMethod
     })
 
-    wrapper.find('button.submit-button').trigger('click')
+    wrapper.find('button.yes').trigger('click')
 
     expect(mockMethod).toBeCalled()
 

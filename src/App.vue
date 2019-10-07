@@ -1,23 +1,21 @@
 <template>
   <div id="app">
     <Header />
-    <Main />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
-import Main from "./components/Main.vue";
-
 import Vue from "vue";
 import Vuelidate from "vuelidate";
+
 Vue.use(Vuelidate);
 
 export default {
   name: "app",
   components: {
-    Header,
-    Main
+    Header
   }
 };
 </script>

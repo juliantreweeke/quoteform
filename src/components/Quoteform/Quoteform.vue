@@ -10,10 +10,12 @@
           name="full name"
           placeholder="Full name"
         />
-        <span
-          class="invalid-feedback"
-          v-if="submitted && $v.formResponses.name.$error"
-        >Full name is required.</span>
+        <div class="invalid-feedback-container">
+          <div
+            class="invalid-feedback"
+            v-if="submitted && $v.formResponses.name.$error"
+          >Full name is required.</div>
+        </div>
       </div>
 
       <div class="quoteform__text-input-container">
@@ -25,10 +27,11 @@
           name="email"
           placeholder="Email"
         />
-
-        <div class="invalid-feedback" v-if="submitted && $v.formResponses.email.$error">
-          <span v-if="!$v.formResponses.email.required">Email is required</span>
-          <span v-if="!$v.formResponses.email.email">Email is invalid</span>
+        <div class="invalid-feedback-container">
+          <div class="invalid-feedback" v-if="submitted && $v.formResponses.email.$error">
+            <span v-if="!$v.formResponses.email.required">Email is required</span>
+            <span v-if="!$v.formResponses.email.email">Email is invalid</span>
+          </div>
         </div>
       </div>
 
@@ -41,18 +44,20 @@
           name="phone"
           placeholder="Phone"
         />
-        <div class="invalid-feedback" v-if="submitted && $v.formResponses.phone.$error">
-          <span v-if="!$v.formResponses.phone.required">Phone number is required</span>
-          <span
-            v-if="!$v.formResponses.phone.minLength && $v.formResponses.phone.numeric"
-          >Number must have at least 10 digits.</span>
-          <span v-if="!$v.formResponses.phone.numeric">Number is invalid</span>
+        <div class="invalid-feedback-container">
+          <div class="invalid-feedback" v-if="submitted && $v.formResponses.phone.$error">
+            <span v-if="!$v.formResponses.phone.required">Phone number is required</span>
+            <span
+              v-if="!$v.formResponses.phone.minLength && $v.formResponses.phone.numeric"
+            >Number must have at least 10 digits.</span>
+            <span v-if="!$v.formResponses.phone.numeric">Number is invalid</span>
+          </div>
         </div>
       </div>
     </div>
     <div class="numberslider-container">
-      <Numberslider v-on:childToParent="onChildClick" title="Bedrooms" />
-      <Numberslider v-on:childToParent="onChildClick" title="Bathrooms" />
+      <Numberslider v-on:childToParent="onChildClick" title="rooms" />
+      <Numberslider v-on:childToParent="onChildClick" title="bathrooms" />
     </div>
     <Buttongroup
       @submit.prevent="submit"
@@ -69,6 +74,8 @@
 import { numeric, email, required, minLength } from "vuelidate/lib/validators";
 import Numberslider from "./Numberslider.vue";
 import Buttongroup from "./Buttongroup.vue";
+import API_URL from "../../../config";
+
 export default {
   name: "Quoteform",
   components: {
@@ -91,8 +98,8 @@ export default {
       ],
       formResponses: {
         frequency: 1,
-        Bedrooms: 1,
-        Bathrooms: 1,
+        rooms: 1,
+        bathrooms: 1,
         name: null,
         email: null,
         phone: null
@@ -105,10 +112,10 @@ export default {
       frequency: {
         required
       },
-      Bedrooms: {
+      rooms: {
         required
       },
-      Bathrooms: {
+      bathrooms: {
         required
       },
       name: {
@@ -134,7 +141,30 @@ export default {
         return;
       }
 
-      alert("SUCCESS!! :-)\n\n" + JSON.stringify(this.formResponses));
+      fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(this.formResponses),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(response => {
+          alert("Thank you!");
+          this.formResponses = {
+            frequency: 1,
+            rooms: 1,
+            bathrooms: 1,
+            name: null,
+            email: null,
+            phone: null
+          };
+        })
+        .then(() => {
+          console.log("Request successful");
+        })
+        .catch(error => {
+          console.log("Request failed", error);
+        });
     },
     onChildClick(value, title) {
       this._data.formResponses[title] = parseInt(value);
@@ -176,6 +206,10 @@ export default {
 .quoteform__text-input-container .input-error {
   border: 1px solid var(--form-error);
   box-shadow: 0 0 5px var(--form-error);
+}
+
+.invalid-feedback-container {
+  min-height: 20px;
 }
 
 .invalid-feedback {
